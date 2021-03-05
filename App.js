@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { View, Text } from 'react-native';
 import * as firebase from 'firebase';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LandingScreen from './Components/Auth/Landing';
+import RegisterScreen from './Components/Auth/Register';
+import LoginScreen from './Components/Auth/Login';
 
 const Stack = createStackNavigator();
 
@@ -21,13 +24,42 @@ if (firebase.apps.length === 0) {
 }
 
 const App = () => {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Landing">
-        <Stack.Screen name="Landing" component={LandingScreen} options={{ headerShown: false }} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+
+  const [loaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged(user => {
+      if (!user) {
+        return (
+          setLoaded(true)
+        )
+      } else {
+        return (
+          setLoaded(true)
+        )
+      }
+    })
+  }, [])
+
+  if (!loaded) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        <Text>
+          Loading...
+        </Text>
+      </View>
+    )
+  } else {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Landing">
+          <Stack.Screen name="Landing" component={LandingScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Register" component={RegisterScreen} />
+          <Stack.Screen name="Login" component={LoginScreen} /> 
+        </Stack.Navigator>
+      </NavigationContainer>
+    )
+  }
 }
 
 export default App;

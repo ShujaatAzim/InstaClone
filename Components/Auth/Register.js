@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Button, TextInput } from 'react-native';
+import firebase from 'firebase';
 
 const Register = () => {
 
@@ -7,7 +8,11 @@ const Register = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  const onSignUp
+  const onSignUp = () => {
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then(result => console.log(result))
+    .catch(err => console.log(err))
+  }
 
   return (
     <View>
