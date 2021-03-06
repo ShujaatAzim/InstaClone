@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import * as firebase from 'firebase';
 import { NavigationContainer } from '@react-navigation/native';
@@ -25,31 +25,33 @@ if (firebase.apps.length === 0) {
 
 const App = () => {
 
-  const [loaded, setLoaded] = useState(false)
+  const [state, setState] = useReducer((state, newState) => ({...state, ...newState}),
+    { loaded: false, loggedIn: false }
+  )
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
       if (!user) {
         return (
-          setLoaded(true)
+          setState({ loaded: true, loggedIn: false })
         )
       } else {
-        return (
-          setLoaded(true)
-        )
+        return setState({ loaded: true, loggedIn: true })
       }
     })
   }, [])
 
-  if (!loaded) {
+  if (!state.loaded) {
     return (
       <View style={{ flex: 1, justifyContent: 'center' }}>
         <Text>
           Loading...
         </Text>
       </View>
-    )
-  } else {
+    );
+  } 
+  
+  if (!state.loggedIn) {
     return (
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Landing">
@@ -58,8 +60,16 @@ const App = () => {
           <Stack.Screen name="Login" component={LoginScreen} /> 
         </Stack.Navigator>
       </NavigationContainer>
-    )
-  }
+    );
+  } 
+
+  return (
+    <View style={{ flex: 1, justifyContent: 'center' }}>
+      <Text>
+        User logged in!
+      </Text>
+    </View>
+  );
 }
 
 export default App;
