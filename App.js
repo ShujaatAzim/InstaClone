@@ -6,6 +6,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LandingScreen from './Components/Auth/Landing';
 import RegisterScreen from './Components/Auth/Register';
 import LoginScreen from './Components/Auth/Login';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import rootReducer from './Redux/Reducers';
+import thunk from 'redux-thunk';
 
 const Stack = createStackNavigator();
 
