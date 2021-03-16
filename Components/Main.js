@@ -6,6 +6,8 @@ const Main = () => {
   useEffect(() => {
 
   }, [])
+
+  // need to turn the class component in the tutorial into a functional component! 
   
   return (
     <View>
