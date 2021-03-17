@@ -4,19 +4,21 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchUser } from '../Redux/Actions/index';
 
-const Main = props => {
+class Main extends React.Component {
 
-  useEffect(() => {
-    props.fetchUser();
-  }, [])
+  componentDidMount() {
+    this.props.fetchUser();
+  }
 
-  return (
-    <View style={{ flex: 1, justifyContent: 'center' }}>
-      <Text>
-        User logged in!
-      </Text>
-    </View>
-  );
+  render () {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        <Text>
+          User logged in!
+        </Text>
+      </View>
+    );
+  }
 }
 
 const mapDispatchProps = dispatch => bindActionCreators({fetchUser}, dispatch)

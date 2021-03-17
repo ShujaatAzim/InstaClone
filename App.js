@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from 'react';
+import React from 'react';
 import { View, Text } from 'react-native';
 import * as firebase from 'firebase';
 import { NavigationContainer } from '@react-navigation/native';
@@ -11,6 +11,7 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './Redux/Reducers';
 import thunk from 'redux-thunk';
+import { render } from 'react-dom';
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
@@ -30,51 +31,57 @@ if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig)
 }
 
-const App = () => {
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loaded: false,
+      loggedIn: false
+    }
+  }
 
-  const [state, setState] = useReducer((state, newState) => ({...state, ...newState}),
-    { loaded: false, loggedIn: false }
-  )
-
-  useEffect(() => {
+  componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
       if (!user) {
         return (
-          setState({ loaded: true, loggedIn: false })
+          this.setState({ loaded: true, loggedIn: false })
         )
       } else {
-        return setState({ loaded: true, loggedIn: true })
+        return this.setState({ loaded: true, loggedIn: true })
       }
     })
-  }, [])
+  }
 
-  if (!state.loaded) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center' }}>
-        <Text>
-          Loading...
-        </Text>
-      </View>
-    );
-  } 
-  
-  if (!state.loggedIn) {
-    return (
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Landing">
-          <Stack.Screen name="Landing" component={LandingScreen} options={{ headerShown: false }} />
-          <Stack.Screen name="Register" component={RegisterScreen} />
-          <Stack.Screen name="Login" component={LoginScreen} /> 
-        </Stack.Navigator>
-      </NavigationContainer>
-    );
-  } 
+  render() {
 
-  return (
-    <Provider store={store}>
-      <MainScreen />
-    </Provider>
-  );
+    if (!this.state.loaded) {
+      return (
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+          <Text>
+            Loading...
+          </Text>
+        </View>
+      );
+    } 
+    
+    if (!this.state.loggedIn) {
+      return (
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Landing">
+            <Stack.Screen name="Landing" component={LandingScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Register" component={RegisterScreen} />
+            <Stack.Screen name="Login" component={LoginScreen} /> 
+          </Stack.Navigator>
+        </NavigationContainer>
+      );
+    } 
+
+    return (
+      <Provider store={store}>
+        <MainScreen />
+      </Provider>
+    );
+  }
 }
 
 export default App;
