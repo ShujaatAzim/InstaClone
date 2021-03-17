@@ -1,19 +1,24 @@
 import React, { useEffect } from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { fetchUser } from '../Redux/Actions/index';
 
-const Main = () => {
+const Main = props => {
 
   useEffect(() => {
-
+    props.fetchUser();
   }, [])
 
-  // need to turn the class component in the tutorial into a functional component! 
-  
   return (
-    <View>
-
+    <View style={{ flex: 1, justifyContent: 'center' }}>
+      <Text>
+        User logged in!
+      </Text>
     </View>
   );
 }
 
-export default Main;
+const mapDispatchProps = dispatch => bindActionCreators({fetchUser}, dispatch)
+
+export default connect(null, mapDispatchProps)(Main);

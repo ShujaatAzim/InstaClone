@@ -6,10 +6,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LandingScreen from './Components/Auth/Landing';
 import RegisterScreen from './Components/Auth/Register';
 import LoginScreen from './Components/Auth/Login';
+import MainScreen from './Components/Main';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './Redux/Reducers';
 import thunk from 'redux-thunk';
+
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 const Stack = createStackNavigator();
 
@@ -68,11 +71,9 @@ const App = () => {
   } 
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center' }}>
-      <Text>
-        User logged in!
-      </Text>
-    </View>
+    <Provider store={store}>
+      <MainScreen />
+    </Provider>
   );
 }
 
