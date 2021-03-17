@@ -11,7 +11,6 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './Redux/Reducers';
 import thunk from 'redux-thunk';
-import { render } from 'react-dom';
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
@@ -36,25 +35,23 @@ class App extends React.Component {
     super(props);
     this.state = {
       loaded: false,
-      loggedIn: false
     }
   }
 
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
       if (!user) {
-        return (
-          this.setState({ loaded: true, loggedIn: false })
-        )
+        this.setState({ loaded: true, loggedIn: false })
       } else {
-        return this.setState({ loaded: true, loggedIn: true })
+        this.setState({ loaded: true, loggedIn: true })
       }
     })
   }
 
   render() {
+    const { loaded, loggedIn } = this.state;
 
-    if (!this.state.loaded) {
+    if (!loaded) {
       return (
         <View style={{ flex: 1, justifyContent: 'center' }}>
           <Text>
@@ -64,7 +61,7 @@ class App extends React.Component {
       );
     } 
     
-    if (!this.state.loggedIn) {
+    if (!loggedIn) {
       return (
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Landing">
