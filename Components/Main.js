@@ -7,6 +7,8 @@ import { fetchUser } from '../Redux/Actions/index';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
+// tutorial vid: https://www.youtube.com/watch?v=1hPgQWbWmEk&ab_channel=freeCodeCamp.org
+
 const Tab = createMaterialBottomTabNavigator();
 
 const EmptyScreen = () => {
